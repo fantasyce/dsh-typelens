@@ -1,4 +1,5 @@
 import ts from 'typescript'
+import { isAbsolute, relative, sep } from 'node:path'
 import type { TypeLensConfig } from '../config.js'
 import type { ContextAnalysis, SourceRange } from '../types.js'
 
@@ -50,7 +51,9 @@ function symbolCandidate(checker: ts.TypeChecker, symbol: ts.Symbol, workspace: 
   const resolved = resolveAlias(checker, symbol)
   const declaration = resolved.declarations?.find(item => {
     const file = item.getSourceFile().fileName
-    return file.startsWith(workspace) && !file.includes('/node_modules/')
+    const rel = relative(workspace, file)
+    const contained = rel === '' || (rel !== '..' && !rel.startsWith(`..${sep}`) && !isAbsolute(rel))
+    return contained && !file.split(sep).includes('node_modules')
   })
   if (!declaration) return undefined
   const text = renderDeclaration(checker, declaration)
@@ -104,7 +107,7 @@ export function buildTypeContext(
   }
 
   const ordered = [...candidates.values()].sort((a, b) => a.priority - b.priority || a.key.localeCompare(b.key))
-  const header = '<typelens_context local_only="true">\n'
+  const header = '<typelens_context analysis_origin="local">\n'
   const footer = '</typelens_context>\n'
   const limit = config.contextTokenBudget * 4
   let body = ''

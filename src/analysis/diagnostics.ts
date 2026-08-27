@@ -2,6 +2,12 @@ import { relative, sep } from 'node:path'
 import ts from 'typescript'
 import type { DiagnosticAnalysis, DiagnosticItem } from '../types.js'
 
+export interface DiagnosticSourceMap {
+  readonly virtualFile: string
+  readonly originalFile: string
+  readonly lineOffset: number
+}
+
 function categoryOf(category: ts.DiagnosticCategory): DiagnosticItem['category'] {
   switch (category) {
     case ts.DiagnosticCategory.Error: return 'error'
@@ -41,14 +47,16 @@ export function buildDiagnostics(
   limit: number,
   tracker: DiagnosticDeltaTracker,
   durationMs: number,
+  sourceMap?: DiagnosticSourceMap,
 ): DiagnosticAnalysis {
   const diagnostics = [...program.getSyntacticDiagnostics(), ...program.getSemanticDiagnostics()]
   const items = diagnostics.flatMap((diagnostic): Omit<DiagnosticItem, 'isNew'>[] => {
     if (!diagnostic.file || diagnostic.start === undefined) return []
     const position = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start)
+    const mapped = sourceMap?.virtualFile === diagnostic.file.fileName
     return [{
-      file: relative(workspace, diagnostic.file.fileName).split(sep).join('/'),
-      line: position.line + 1,
+      file: mapped ? sourceMap.originalFile : relative(workspace, diagnostic.file.fileName).split(sep).join('/'),
+      line: position.line + 1 + (mapped ? sourceMap.lineOffset : 0),
       character: position.character + 1,
       code: diagnostic.code,
       category: categoryOf(diagnostic.category),

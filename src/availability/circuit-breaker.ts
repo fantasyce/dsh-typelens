@@ -32,6 +32,11 @@ export class CircuitBreaker {
 
   recordSuccess(): void { this.#failures = [] }
 
+  reset(): void {
+    this.#failures = []
+    this.#pausedUntil = 0
+  }
+
   snapshot(): { readonly paused: boolean; readonly failuresInWindow: number; readonly pausedUntil: number } {
     return Object.freeze({ paused: !this.allowAutomatic(), failuresInWindow: this.#failures.length, pausedUntil: this.#pausedUntil })
   }

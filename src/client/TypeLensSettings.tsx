@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { TYPELENS_STYLES } from './styles.js'
+import { en, type TypeLensLocaleKey } from './locales.js'
 
 const STYLE_ID = 'dsh-typelens-settings'
 
@@ -32,7 +33,8 @@ interface Snapshot {
   product: string
   version: string
   targetDsh: string
-  localOnly: boolean
+  analysisLocal: boolean
+  externalNetworkRequests: boolean
   config: ClientConfig
   circuit: { paused: boolean; failuresInWindow: number; pausedUntil: number }
   metrics: { requests: number; injections: number; skips: number; timeouts: number; failures: number; cacheHits: number; totalDurationMs: number }
@@ -45,9 +47,13 @@ async function request(endpoint: string, init?: RequestInit): Promise<Snapshot> 
   return body as Snapshot
 }
 
-export interface TypeLensSettingsProps { readonly endpoint?: string }
+export interface TypeLensSettingsProps {
+  readonly endpoint?: string
+  readonly t?: (key: TypeLensLocaleKey) => string
+}
 
-export function TypeLensSettings({ endpoint = '/api/typelens' }: TypeLensSettingsProps): JSX.Element {
+export function TypeLensSettings({ endpoint = '/api/typelens', t }: TypeLensSettingsProps): JSX.Element {
+  const text = (key: TypeLensLocaleKey): string => t?.(key) ?? en[key]
   const [snapshot, setSnapshot] = useState<Snapshot>()
   const [draft, setDraft] = useState<ClientConfig>()
   const [message, setMessage] = useState<string>()
@@ -69,7 +75,7 @@ export function TypeLensSettings({ endpoint = '/api/typelens' }: TypeLensSetting
     try {
       const value = await request(endpoint, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(draft) })
       if (value.config) { setSnapshot(value); setDraft(structuredClone(value.config)) }
-      setMessage('Settings saved')
+      setMessage(text('saved'))
     } catch (reason) { setError(reason instanceof Error ? reason.message : String(reason)) }
     finally { setBusy(false) }
   }
@@ -79,50 +85,50 @@ export function TypeLensSettings({ endpoint = '/api/typelens' }: TypeLensSetting
     try {
       const value = await request(endpoint, { method: 'POST' })
       setSnapshot(value)
-      setMessage('Cache and counters reset')
+      setMessage(text('resetDone'))
     } catch (reason) { setError(reason instanceof Error ? reason.message : String(reason)) }
     finally { setBusy(false) }
   }
 
-  if (!snapshot || !draft) return <section className="typelens-page" aria-busy="true"><p>{error ?? 'Loading TypeLens…'}</p></section>
+  if (!snapshot || !draft) return <section className="typelens-page" aria-busy="true"><p>{error ?? text('loading')}</p></section>
 
   return (
     <section className="typelens-page" aria-labelledby="typelens-title">
       <header className="typelens-header">
-        <div><h2 id="typelens-title">DSH TypeLens</h2><p>Local type context and edit diagnostics</p></div>
+        <div><h2 id="typelens-title">{text('title')}</h2><p>{text('subtitle')}</p></div>
         <div className={`typelens-status ${snapshot.circuit.paused ? 'paused' : 'healthy'}`} role="status">
-          {snapshot.circuit.paused ? 'Paused' : 'Healthy'} · <span>{snapshot.version}</span>
+          {snapshot.circuit.paused ? text('paused') : text('healthy')} · <span>{snapshot.version}</span>
         </div>
       </header>
 
       <div className="typelens-grid">
         <fieldset className="typelens-card">
-          <legend>Automatic assistance</legend>
-          <label><input type="checkbox" checked={draft.automaticContext} onChange={event => setDraft({ ...draft, automaticContext: event.target.checked })} /> Automatic read context</label>
-          <label><input type="checkbox" checked={draft.automaticDiagnostics} onChange={event => setDraft({ ...draft, automaticDiagnostics: event.target.checked })} /> Automatic edit diagnostics</label>
-          <label>Context token budget<input aria-label="Context token budget" type="number" min={32} max={16000} value={draft.contextTokenBudget} onChange={event => setDraft({ ...draft, contextTokenBudget: Number(event.target.value) })} /></label>
-          <label>Import depth<input aria-label="Import depth" type="number" min={0} max={16} value={draft.maxDepth} onChange={event => setDraft({ ...draft, maxDepth: Number(event.target.value) })} /></label>
-          <label>Maximum diagnostics<input aria-label="Maximum diagnostics" type="number" min={1} max={1000} value={draft.maxDiagnostics} onChange={event => setDraft({ ...draft, maxDiagnostics: Number(event.target.value) })} /></label>
+          <legend>{text('automatic')}</legend>
+          <label><input type="checkbox" checked={draft.automaticContext} onChange={event => setDraft({ ...draft, automaticContext: event.target.checked })} /> {text('automaticContext')}</label>
+          <label><input type="checkbox" checked={draft.automaticDiagnostics} onChange={event => setDraft({ ...draft, automaticDiagnostics: event.target.checked })} /> {text('automaticDiagnostics')}</label>
+          <label>{text('contextBudget')}<input aria-label={text('contextBudget')} type="number" min={32} max={16000} value={draft.contextTokenBudget} onChange={event => setDraft({ ...draft, contextTokenBudget: Number(event.target.value) })} /></label>
+          <label>{text('importDepth')}<input aria-label={text('importDepth')} type="number" min={0} max={16} value={draft.maxDepth} onChange={event => setDraft({ ...draft, maxDepth: Number(event.target.value) })} /></label>
+          <label>{text('maxDiagnostics')}<input aria-label={text('maxDiagnostics')} type="number" min={1} max={1000} value={draft.maxDiagnostics} onChange={event => setDraft({ ...draft, maxDiagnostics: Number(event.target.value) })} /></label>
         </fieldset>
 
-        <section className="typelens-card" aria-labelledby="typelens-health"><h3 id="typelens-health">Health and usage</h3>
+        <section className="typelens-card" aria-labelledby="typelens-health"><h3 id="typelens-health">{text('health')}</h3>
           <dl className="typelens-metrics">
-            <div><dt>Requests</dt><dd>{snapshot.metrics.requests}</dd></div>
-            <div><dt>Injections</dt><dd>{snapshot.metrics.injections}</dd></div>
-            <div><dt>Cache hits</dt><dd>{snapshot.metrics.cacheHits}</dd></div>
-            <div><dt>Timeouts</dt><dd>{snapshot.metrics.timeouts}</dd></div>
-            <div><dt>Failures</dt><dd>{snapshot.metrics.failures}</dd></div>
-            <div><dt>DSH target</dt><dd>{snapshot.targetDsh}</dd></div>
+            <div><dt>{text('requests')}</dt><dd>{snapshot.metrics.requests}</dd></div>
+            <div><dt>{text('injections')}</dt><dd>{snapshot.metrics.injections}</dd></div>
+            <div><dt>{text('cacheHits')}</dt><dd>{snapshot.metrics.cacheHits}</dd></div>
+            <div><dt>{text('timeouts')}</dt><dd>{snapshot.metrics.timeouts}</dd></div>
+            <div><dt>{text('failures')}</dt><dd>{snapshot.metrics.failures}</dd></div>
+            <div><dt>{text('dshTarget')}</dt><dd>{snapshot.targetDsh}</dd></div>
           </dl>
-          <p className="typelens-local">Source processing is local-only. TypeLens records aggregate counters, never source text.</p>
+          <p className="typelens-local">{text('privacy')}</p>
         </section>
       </div>
 
       {error && <p className="typelens-error" role="alert">{error}</p>}
       {message && <p className="typelens-message" role="status">{message}</p>}
       <footer className="typelens-actions">
-        <button type="button" className="secondary" disabled={busy} onClick={() => { void reset() }}>Reset cache and counters</button>
-        <button type="button" className="primary" disabled={busy} onClick={() => { void save() }}>Save settings</button>
+        <button type="button" className="secondary" disabled={busy} onClick={() => { void reset() }}>{text('reset')}</button>
+        <button type="button" className="primary" disabled={busy} onClick={() => { void save() }}>{text('save')}</button>
       </footer>
     </section>
   )

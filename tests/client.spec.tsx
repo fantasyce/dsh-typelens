@@ -4,9 +4,10 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
 import { TypeLensSettings } from '../src/client/TypeLensSettings.js'
 import { apply } from '../src/client/index.js'
+import { zh } from '../src/client/locales.js'
 
 const snapshot = {
-  product: 'DSH TypeLens', version: '0.1.0', targetDsh: '0.1.1-rc.2', localOnly: true,
+  product: 'DSH TypeLens', version: '0.1.0', targetDsh: '0.1.1-rc.2', analysisLocal: true, externalNetworkRequests: false,
   config: {
     automaticContext: true, automaticDiagnostics: true, contextTokenBudget: 800, maxDepth: 4,
     automaticTimeoutMs: 1500, explicitTimeoutMs: 5000, maxFileBytes: 2097152, maxDiagnostics: 40,
@@ -64,5 +65,13 @@ describe('TypeLens Web settings', () => {
     await screen.findByText('0.1.0')
     await user.click(screen.getByRole('button', { name: 'Save settings' }))
     expect((await screen.findByRole('alert')).textContent).toContain('contextTokenBudget invalid')
+  })
+
+  it('renders the complete settings surface in Chinese through the DSH locale binding', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify(snapshot), { status: 200 })))
+    render(<TypeLensSettings t={key => zh[key]} />)
+    expect(await screen.findByText('DSH 类型透镜')).toBeTruthy()
+    expect(screen.getByRole('button', { name: '保存设置' })).toBeTruthy()
+    expect(screen.getByText('健康与使用情况')).toBeTruthy()
   })
 })

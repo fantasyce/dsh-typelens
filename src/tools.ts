@@ -22,6 +22,15 @@ function workspaceOf(exec: Pick<ToolExecution, 'agent'>): { workspace: string; s
   return { workspace, sessionId: String(exec.agent?.session.header.id ?? 'unknown') }
 }
 
+function renderInspected(rows: Awaited<ReturnType<ProjectManager['inspect']>>): string {
+  if (rows.length === 0) return 'No matching declarations were found in the bounded workspace project.'
+  return rows.map(row => [
+    `${row.kind} ${row.name} — ${row.file}:${row.line}`,
+    row.declaration,
+    row.usages.length > 0 ? `Usages (${row.usages.length}): ${row.usages.map(usage => `${usage.file}:${usage.line}:${usage.character}`).join(', ')}` : 'Usages: none found',
+  ].join('\n')).join('\n\n')
+}
+
 export function registerTypeLensTools(
   ctx: Context,
   runtimeOrManager: TypeLensRuntime | ProjectManager,
@@ -35,60 +44,67 @@ export function registerTypeLensTools(
         get manager() { return runtimeOrManager as ProjectManager },
         get config() { return legacyConfig },
         breaker: legacyBreaker!, metrics: legacyMetrics!,
-        snapshot: () => ({ product: 'DSH TypeLens', version: '0.1.0', targetDsh: '0.1.1-rc.2', localOnly: true, config: legacyConfig, circuit: legacyBreaker!.snapshot(), metrics: legacyMetrics!.snapshot() }),
+        snapshot: () => ({ product: 'DSH TypeLens', version: '0.1.0', targetDsh: '0.1.1-rc.2', analysisLocal: true, externalNetworkRequests: false, config: legacyConfig, circuit: legacyBreaker!.snapshot(), metrics: legacyMetrics!.snapshot() }),
       }
   const config = access.config
   ctx.tools.register(defineTool({
     name: 'typelens_lookup_type',
-    description: 'Find type declarations relevant to a named symbol in a local workspace file. Source never leaves the machine.',
+    description: 'Find type declarations relevant to a named symbol using local analysis. Returned context follows the active DSH model-provider path.',
     parameters: {
-      file_path: { type: 'string', required: true, description: 'Source file relative to the session workspace.' },
+      file_path: { type: 'string', description: 'Optional source file relative to the session workspace. Omit to search the configured project.' },
       name: { type: 'string', required: true, description: 'Type, interface, class, function, or symbol name.' },
     },
     output: TEXT_OUTPUT,
     timeoutMs: config.explicitTimeoutMs,
     async execute(args, exec) {
       const { workspace } = workspaceOf(exec)
-      const result = await access.manager.analyzeContext({ workspace, file: args.file_path }, exec.signal)
-      const lower = args.name.toLowerCase()
-      const blocks = result.text.split(/\n\n+/u).filter(block => block.toLowerCase().includes(lower))
-      return { text: blocks.length > 0 ? blocks.join('\n\n') : `No declaration matching ${args.name} was found in the bounded context for ${result.file}.` }
+      return { text: renderInspected(await access.manager.inspect({ workspace, ...(args.file_path ? { file: args.file_path } : {}), query: args.name, exact: true, limit: 20 }, exec.signal)) }
     },
   }))
 
   ctx.tools.register(defineTool({
     name: 'typelens_list_types',
     description: 'List bounded type declarations relevant to a local workspace file.',
-    parameters: { file_path: { type: 'string', required: true, description: 'Source file relative to the session workspace.' } },
+    parameters: {
+      file_path: { type: 'string', description: 'Optional source file relative to the session workspace.' },
+      query: { type: 'string', description: 'Optional case-insensitive name filter.' },
+      kind: { type: 'string', description: 'Optional declaration kind filter such as interface, typealias, class, enum, function, or variable.' },
+      limit: { type: 'number', description: 'Maximum declarations, from 1 to 500.' },
+    },
     output: TEXT_OUTPUT,
     timeoutMs: config.explicitTimeoutMs,
     async execute(args, exec) {
       const { workspace } = workspaceOf(exec)
-      const result = await access.manager.analyzeContext({ workspace, file: args.file_path }, exec.signal)
-      return { text: result.text || `No relevant declarations found for ${result.file}.` }
+      return { text: renderInspected(await access.manager.inspect({ workspace, ...(args.file_path ? { file: args.file_path } : {}), ...(args.query ? { query: args.query } : {}), ...(args.kind ? { kind: args.kind } : {}), ...(args.limit ? { limit: args.limit } : {}) }, exec.signal)) }
     },
   }))
 
   ctx.tools.register(defineTool({
     name: 'typelens_check',
     description: 'Run bounded local TypeScript diagnostics for a file and its project.',
-    parameters: { file_path: { type: 'string', required: true, description: 'Source file relative to the session workspace.' } },
+    parameters: { file_path: { type: 'string', description: 'Optional file. Omit to check the configured project.' } },
     output: TEXT_OUTPUT,
     timeoutMs: config.explicitTimeoutMs,
     async execute(args, exec) {
       const { workspace, sessionId } = workspaceOf(exec)
-      return { text: formatDiagnostics(await access.manager.analyzeDiagnostics({ workspace, file: args.file_path, sessionId }, exec.signal)) }
+      let file = args.file_path
+      if (!file) file = (await access.manager.inspect({ workspace, limit: 1 }, exec.signal))[0]?.file
+      if (!file) throw new Error('missing-project: no supported source file found')
+      return { text: formatDiagnostics(await access.manager.analyzeDiagnostics({ workspace, file, sessionId: `${sessionId}:explicit:${Date.now()}` }, exec.signal)) }
     },
   }))
 
   ctx.tools.register(defineTool({
     name: 'typelens_explain',
     description: 'Explain the active TypeLens configuration, health, circuit state, and aggregate source-free metrics.',
-    parameters: {},
+    parameters: { file_path: { type: 'string', description: 'Optional source file for project, adapter, and budget details.' } },
     output: TEXT_OUTPUT,
     isConcurrencySafe: () => true,
-    async execute() {
-      return { text: JSON.stringify(access.snapshot(), null, 2) }
+    async execute(args, exec) {
+      const snapshot = access.snapshot()
+      if (!args.file_path) return { text: JSON.stringify(snapshot, null, 2) }
+      const { workspace } = workspaceOf(exec)
+      return { text: JSON.stringify({ ...snapshot, file: await access.manager.explain({ workspace, file: args.file_path }, exec.signal) }, null, 2) }
     },
   }))
 }

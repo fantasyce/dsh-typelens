@@ -29,4 +29,12 @@ describe('diagnostic analysis', () => {
     expect(result.diagnostics).toHaveLength(3)
     expect(result.omitted).toBeGreaterThan(0)
   })
+
+  it('maps Vue script diagnostics back to the original component path and lines', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'typelens-diag-vue-'))
+    await writeFile(join(root, 'Widget.vue'), '<template>x</template>\n<script lang="ts">\nconst count: number = "wrong"\n</script>\n')
+    const manager = new ProjectManager(normalizeConfig({}))
+    const result = await manager.analyzeDiagnostics({ workspace: root, file: 'Widget.vue', sessionId: 'vue' }, new AbortController().signal)
+    expect(result.diagnostics[0]).toMatchObject({ file: 'Widget.vue', line: 3, code: 2322 })
+  })
 })

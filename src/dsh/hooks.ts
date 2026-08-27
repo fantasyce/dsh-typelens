@@ -18,6 +18,11 @@ function pluginContext(text: string) {
   return createUserMessage({ content: [{ type: 'text', text }], source: { kind: 'plugin', plugin: 'dsh-typelens' } })
 }
 
+function contextDelivery(analysis: Awaited<ReturnType<ProjectManager['analyzeContext']>>): string {
+  const file = analysis.file.replaceAll('&', '&amp;').replaceAll('"', '&quot;')
+  return `<typelens_delivery file="${file}" declarations="${analysis.declarations}" estimated_tokens="${analysis.estimatedTokens}" duration_ms="${analysis.durationMs}" cache_hit="${analysis.cacheHit}" truncated="${analysis.truncated}">\n${analysis.text}</typelens_delivery>`
+}
+
 export function createPostExecuteHandler(
   runtimeOrManager: TypeLensRuntime | ProjectManager,
   legacyConfig?: TypeLensConfig,
@@ -43,9 +48,11 @@ export function createPostExecuteHandler(
     }
     const downstream = await next()
     if (downstream.kind !== 'accept') return downstream
+    if (downstream.additionalContexts?.some(context => context.source?.kind === 'plugin' && context.source.plugin === 'dsh-typelens')) return downstream
     try {
+      const analysisSignal = AbortSignal.any([exec.signal, AbortSignal.timeout(access.config.automaticTimeoutMs)])
       if (operation.kind === 'read' && access.config.automaticContext) {
-        const analysis = await access.manager.analyzeContext({ workspace, file: operation.file, ...(operation.range ? { range: operation.range } : {}) }, exec.signal)
+        const analysis = await access.manager.analyzeContext({ workspace, file: operation.file, ...(operation.range ? { range: operation.range } : {}) }, analysisSignal)
         if (!analysis.text) {
           access.metrics.record({ outcome: 'skipped', durationMs: analysis.durationMs, cacheHit: analysis.cacheHit })
           access.breaker.recordSuccess()
@@ -53,12 +60,12 @@ export function createPostExecuteHandler(
         }
         access.metrics.record({ outcome: 'injected', durationMs: analysis.durationMs, cacheHit: analysis.cacheHit })
         access.breaker.recordSuccess()
-        return { ...downstream, additionalContexts: [...downstream.additionalContexts ?? [], pluginContext(analysis.text)] }
+        return { ...downstream, additionalContexts: [...downstream.additionalContexts ?? [], pluginContext(contextDelivery(analysis))] }
       }
       if (operation.kind === 'write' && access.config.automaticDiagnostics) {
         const analysis = await access.manager.analyzeDiagnostics({
           workspace, file: operation.file, sessionId: String(exec.agent?.session.header.id ?? 'unknown'),
-        }, exec.signal)
+        }, analysisSignal)
         access.metrics.record({ outcome: 'injected', durationMs: analysis.durationMs, cacheHit: false })
         access.breaker.recordSuccess()
         return { ...downstream, additionalContexts: [...downstream.additionalContexts ?? [], pluginContext(formatDiagnostics(analysis))] }

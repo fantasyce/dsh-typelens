@@ -52,4 +52,26 @@ describe('ProjectManager context analysis', () => {
     const manager = new ProjectManager(normalizeConfig(undefined))
     await expect(manager.analyzeContext({ workspace: root, file }, controller.signal)).rejects.toThrow('stop')
   })
+
+  it('analyzes type references inside Vue single-file component script blocks', async () => {
+    const root = await mkdtemp(join(tmpdir(), 'typelens-vue-'))
+    await writeFile(join(root, 'types.ts'), 'export interface User { id: string; displayName: string }\n')
+    await writeFile(join(root, 'Widget.vue'), '<template><p>x</p></template>\n<script setup lang="ts">\nimport type { User } from "./types"\nconst user: User = { id: "1", displayName: "Ada" }\n</script>\n')
+    const manager = new ProjectManager(normalizeConfig({}))
+    const result = await manager.analyzeContext({ workspace: root, file: 'Widget.vue', range: { startLine: 3, endLine: 4 } }, new AbortController().signal)
+    expect(result.text).toContain('interface User')
+    expect(result.file).toBe('Widget.vue')
+  })
+
+  it('reuses bounded in-memory context and invalidates it when an imported source changes', async () => {
+    const { root, file } = await fixture()
+    const manager = new ProjectManager(normalizeConfig({}))
+    const request = { workspace: root, file, range: { startLine: 2, endLine: 4 } }
+    expect((await manager.analyzeContext(request, new AbortController().signal)).cacheHit).toBe(false)
+    expect((await manager.analyzeContext(request, new AbortController().signal)).cacheHit).toBe(true)
+    await writeFile(join(root, 'src/types.ts'), 'export interface User { id: string; changed: boolean }\n')
+    const changed = await manager.analyzeContext(request, new AbortController().signal)
+    expect(changed.cacheHit).toBe(false)
+    expect(changed.text).toContain('changed')
+  })
 })

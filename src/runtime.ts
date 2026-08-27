@@ -7,7 +7,8 @@ export interface RuntimeSnapshot {
   readonly product: 'DSH TypeLens'
   readonly version: '0.1.0'
   readonly targetDsh: '0.1.1-rc.2'
-  readonly localOnly: true
+  readonly analysisLocal: true
+  readonly externalNetworkRequests: false
   readonly config: TypeLensConfig
   readonly circuit: ReturnType<CircuitBreaker['snapshot']>
   readonly metrics: MetricsSnapshot
@@ -40,13 +41,14 @@ export class TypeLensRuntime {
   reset(): void {
     this.#manager.clear()
     this.metrics.reset()
+    this.breaker.reset()
   }
 
   dispose(): void { this.#manager.clear() }
 
   snapshot(): RuntimeSnapshot {
     return Object.freeze({
-      product: 'DSH TypeLens', version: '0.1.0', targetDsh: '0.1.1-rc.2', localOnly: true,
+      product: 'DSH TypeLens', version: '0.1.0', targetDsh: '0.1.1-rc.2', analysisLocal: true, externalNetworkRequests: false,
       config: this.#config, circuit: this.breaker.snapshot(), metrics: this.metrics.snapshot(),
     })
   }

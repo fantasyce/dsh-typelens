@@ -12,8 +12,11 @@ describe('TypeLensRuntime', () => {
   it('reports source-free health and resets cache and metrics', () => {
     const runtime = new TypeLensRuntime()
     runtime.metrics.record({ outcome: 'failure', durationMs: 1, cacheHit: false })
+    for (let index = 0; index < 5; index += 1) runtime.breaker.recordFailure()
     expect(runtime.snapshot().metrics.failures).toBe(1)
+    expect(runtime.snapshot().circuit.paused).toBe(true)
     runtime.reset()
     expect(runtime.snapshot().metrics.failures).toBe(0)
+    expect(runtime.snapshot().circuit.paused).toBe(false)
   })
 })

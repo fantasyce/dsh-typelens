@@ -8,7 +8,7 @@ The first public release is `0.1.0`. It targets DeepSeek Harness `0.1.1-rc.2`, N
 
 ## Product principles
 
-- Local-only: source text and type information never leave the machine.
+- Local analysis: TypeLens makes no outbound requests and persists no source-bearing analysis state; injected context follows the configured DSH model-provider boundary.
 - Fail open for host availability: TypeLens failures never turn a successful DSH file operation into a failed operation.
 - Bounded by default: every analysis has explicit time, byte, result, recursion, and token budgets.
 - Observable: every injection and diagnostic result explains its source, size, duration, cache state, and any truncation or degradation.
@@ -17,9 +17,9 @@ The first public release is `0.1.0`. It targets DeepSeek Harness `0.1.1-rc.2`, N
 
 ## Supported languages and projects
 
-The plugin supports TypeScript, TSX, JavaScript, and JSX through the TypeScript Language Service. It recognizes `tsconfig.json` and `jsconfig.json`, project references, `extends`, path aliases, package types, composite projects, and monorepo layouts.
+The plugin supports TypeScript, TSX, JavaScript, and JSX through the TypeScript compiler services. It recognizes `tsconfig.json` and `jsconfig.json`, project references, `extends`, path aliases, package types, composite projects, and monorepo layouts. In-memory result caches are dependency-version checked before reuse.
 
-Svelte and Vue single-file components are supported through optional adapters. The base package must install and operate without Svelte or Vue dependencies. When the corresponding compiler is present, the adapter extracts script blocks, maintains source offsets, and passes virtual TypeScript to the same analysis engine. Missing optional dependencies produce a visible, non-fatal degradation reason and never break file reads or writes.
+Svelte and Vue single-file component script blocks are supported through optional adapters. When the corresponding compiler is present, it parses the component before script extraction; otherwise TypeLens uses a bounded first-instance-script fallback. Source offsets are mapped back to the component. Template semantics are outside the 0.1.0 boundary, and adapter failures never break file reads or writes.
 
 Generated output, dependency trees, VCS metadata, secrets, and build caches are excluded by default. Users can add allow and deny globs, but TypeLens refuses paths outside the owning session workspace unless explicitly enabled.
 
@@ -64,7 +64,7 @@ The repository is one npm package with focused modules:
 
 - `plugin`: Cordis lifecycle, configuration, tool registration, and DSH compatibility adapter.
 - `interception`: recognizes supported file tool calls/results and produces additional contexts.
-- `project`: discovers configuration, owns per-workspace language services, watches versions, and bounds cache lifetime.
+- `project`: discovers configuration, builds compiler programs, validates dependency versions before cache reuse, and bounds cache lifetime.
 - `analysis`: extracts referenced symbols, ranks type declarations, renders context, and calculates diagnostics deltas.
 - `adapters`: plain TypeScript plus optional Svelte and Vue virtual-document adapters.
 - `tools`: explicit model-facing tools with stable schemas.
@@ -75,7 +75,7 @@ The DSH-specific adapter is kept thin. Domain modules depend on local interfaces
 
 ## Data and privacy
 
-TypeLens persists only validated user settings. Cache entries, project graphs, diagnostics, and metrics are in memory and are released on plugin unload. No source code, type declarations, prompts, session transcripts, or file contents are written by the plugin.
+TypeLens persists only validated user settings. Cache entries, project graphs, diagnostics, and metrics are in memory and are released on plugin unload. No source code, type declarations, prompts, session transcripts, or file contents are written by the plugin. Context and diagnostics appended to an agent step are model-visible and travel through the model provider selected in DSH; TypeLens itself opens no network connection.
 
 Logs contain workspace-relative paths, stable reason codes, counts, durations, and hashes only. Error messages are sanitized before logging.
 
@@ -85,7 +85,7 @@ Defaults:
 
 - context budget: 800 estimated tokens;
 - transitive type depth: 4;
-- analysis timeout: 1,500 ms for automatic enrichment and 5,000 ms for explicit checks;
+- cooperative analysis deadline: 1,500 ms for automatic enrichment and 5,000 ms for explicit checks, plus file, source-count, result, and cache caps around synchronous compiler work;
 - maximum source file size: 2 MiB;
 - maximum diagnostics: 20 for the changed file and 20 across other files;
 - maximum active workspace services: 8 with least-recently-used eviction;
@@ -110,7 +110,7 @@ Rendering always emits complete declarations. A declaration that cannot fit is s
 
 The published artifact contains built ESM, declarations, the Cordis bundle patch, the Web client bundle, license, README, and package metadata. It excludes source maps containing absolute paths, tests, fixtures, caches, reports, local settings, and development checkouts.
 
-The package declares its DSH bundle in `package.json`, supports installation with `dsh plugin --profile web add dsh-typelens`, and requires no install-time lifecycle script. Git installs are supported from release tags but npm tarballs are the recommended path.
+The package declares its DSH bundle in `package.json` and requires no install-time lifecycle script. The GitHub Release tarball is the supported 0.1.0 install source. Git-tag installs are intentionally unsupported because generated build output is not committed; the short package-name command becomes available after npm publication.
 
 ## Verification and release gates
 
