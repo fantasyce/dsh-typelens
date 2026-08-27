@@ -15,9 +15,9 @@ grep -Fq 'releases/latest' "$index"
 grep -Fq 'github.com/fantasyce/dsh-typelens' "$index"
 grep -Fq '<title' "$repo_dir/site/typelens-flow.svg"
 grep -Fq '<desc' "$repo_dir/site/typelens-flow.svg"
-grep -Fq 'actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b' "$repo_dir/.github/workflows/pages.yml"
-grep -Fq 'actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b' "$repo_dir/.github/workflows/pages.yml"
-grep -Fq 'actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e' "$repo_dir/.github/workflows/pages.yml"
+grep -Fq 'actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d' "$repo_dir/.github/workflows/pages.yml"
+grep -Fq 'actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9' "$repo_dir/.github/workflows/pages.yml"
+grep -Fq 'actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128' "$repo_dir/.github/workflows/pages.yml"
 
 if rg -n 'https?://[^" ]+\.(js|css|woff2?|ttf)|<script|googletag|segment\.com|plausible|analytics|href="#"|TODO|PLACEHOLDER' "$repo_dir/site"; then
   echo 'site contains an external dependency, tracker, script, or placeholder' >&2

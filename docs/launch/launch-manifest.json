@@ -2,16 +2,17 @@
   "schema_version": 1,
   "release": "v0.1.1",
   "prepared_at": "2026-08-28T02:30:00+08:00",
+  "finalized_at": "2026-08-28T02:52:00+08:00",
   "channels": [
-    {"id":"github-release","target":"https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.1","copy":"release notes","status":"prepared"},
-    {"id":"github-pages","target":"https://fantasyce.github.io/dsh-typelens/","copy":"site/","status":"prepared"},
-    {"id":"github-discussion","target":"https://github.com/fantasyce/dsh-typelens/discussions","copy":"docs/launch/launch-article.md","status":"prepared"},
-    {"id":"github-issues","target":"https://github.com/fantasyce/dsh-typelens/issues","copy":".github/ISSUE_TEMPLATE/","status":"prepared"},
+    {"id":"github-release","target":"https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.1","copy":"release notes","status":"published"},
+    {"id":"github-pages","target":"https://fantasyce.github.io/dsh-typelens/","copy":"site/","status":"published"},
+    {"id":"github-discussion","target":"https://github.com/fantasyce/dsh-typelens/discussions/2","copy":"docs/launch/launch-article.md","status":"published"},
+    {"id":"github-issues","target":"https://github.com/fantasyce/dsh-typelens/issues/3","copy":".github/ISSUE_TEMPLATE/","status":"published"},
     {"id":"show-hn","target":"https://news.ycombinator.com/submit","copy":"docs/launch/community-posts.md#show-hn","status":"not-posted"},
     {"id":"reddit","target":"relevant subreddit","copy":"docs/launch/community-posts.md#reddit","status":"not-posted"},
     {"id":"x","target":"maintainer account","copy":"docs/launch/community-posts.md#x","status":"not-posted"},
     {"id":"linkedin","target":"maintainer account","copy":"docs/launch/community-posts.md#linkedin","status":"not-posted"},
     {"id":"showcase","target":"applicable developer showcase","copy":"docs/launch/showcase-submission.md","status":"prepared"},
-    {"id":"design-partners","target":"in-repository public issue","copy":"docs/launch/maintainer-outreach.md","status":"prepared"}
+    {"id":"design-partners","target":"https://github.com/fantasyce/dsh-typelens/issues/4","copy":"docs/launch/maintainer-outreach.md","status":"published"}
   ]
 }
