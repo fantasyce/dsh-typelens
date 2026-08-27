@@ -9,6 +9,7 @@ describe('DSH plugin entry', () => {
       tools: { register: (definition: { name: string }) => { tools.push(definition.name); return () => {} } },
       on: (event: string) => { events.push(event); return () => {} },
       effect: vi.fn(),
+      inject: vi.fn(),
     }
     apply(ctx as never, {})
     expect(name).toBe('typelens')

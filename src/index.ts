@@ -2,11 +2,10 @@ import type { Context } from '@deepseek-ai/cordis'
 import z from '@deepseek-ai/schemastery'
 import type {} from '@deepseek-ai/dsh-tools'
 import { normalizeConfig, type TypeLensConfig } from './config.js'
-import { ProjectManager } from './project/manager.js'
-import { CircuitBreaker } from './availability/circuit-breaker.js'
-import { MetricsStore } from './metrics.js'
+import { TypeLensRuntime } from './runtime.js'
 import { createPostExecuteHandler } from './dsh/hooks.js'
 import { registerTypeLensTools } from './tools.js'
+import { defaultSettingsPath, loadPersistedConfig, registerTypeLensHostApi } from './host-api.js'
 
 export { DEFAULT_CONFIG, normalizeConfig, type TypeLensConfig } from './config.js'
 export { ProjectManager } from './project/manager.js'
@@ -40,11 +39,11 @@ export const Config = z.object({
 })
 
 export function apply(ctx: Context, input: Config = {}): void {
-  const config = normalizeConfig(input)
-  const manager = new ProjectManager(config)
-  const breaker = new CircuitBreaker()
-  const metrics = new MetricsStore()
-  registerTypeLensTools(ctx, manager, config, breaker, metrics)
-  ctx.on('tools/post-execute', createPostExecuteHandler(manager, config, breaker, metrics))
-  ctx.effect(() => () => { manager.clear() }, 'typelens: release in-memory project state')
+  const settingsPath = defaultSettingsPath()
+  const config = loadPersistedConfig(settingsPath) ?? normalizeConfig(input)
+  const runtime = new TypeLensRuntime(config)
+  registerTypeLensTools(ctx, runtime)
+  ctx.on('tools/post-execute', createPostExecuteHandler(runtime))
+  registerTypeLensHostApi(ctx, runtime, settingsPath)
+  ctx.effect(() => () => { runtime.dispose() }, 'typelens: release in-memory project state')
 }

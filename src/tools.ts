@@ -5,6 +5,7 @@ import type { CircuitBreaker } from './availability/circuit-breaker.js'
 import type { MetricsStore } from './metrics.js'
 import type { ProjectManager } from './project/manager.js'
 import { formatDiagnostics } from './dsh/format.js'
+import type { TypeLensRuntime } from './runtime.js'
 
 const TEXT_OUTPUT = {
   schema: {
@@ -23,11 +24,20 @@ function workspaceOf(exec: Pick<ToolExecution, 'agent'>): { workspace: string; s
 
 export function registerTypeLensTools(
   ctx: Context,
-  manager: ProjectManager,
-  config: TypeLensConfig,
-  breaker: CircuitBreaker,
-  metrics: MetricsStore,
+  runtimeOrManager: TypeLensRuntime | ProjectManager,
+  legacyConfig?: TypeLensConfig,
+  legacyBreaker?: CircuitBreaker,
+  legacyMetrics?: MetricsStore,
 ): void {
+  const access = legacyConfig === undefined
+    ? runtimeOrManager as TypeLensRuntime
+    : {
+        get manager() { return runtimeOrManager as ProjectManager },
+        get config() { return legacyConfig },
+        breaker: legacyBreaker!, metrics: legacyMetrics!,
+        snapshot: () => ({ product: 'DSH TypeLens', version: '0.1.0', targetDsh: '0.1.1-rc.2', localOnly: true, config: legacyConfig, circuit: legacyBreaker!.snapshot(), metrics: legacyMetrics!.snapshot() }),
+      }
+  const config = access.config
   ctx.tools.register(defineTool({
     name: 'typelens_lookup_type',
     description: 'Find type declarations relevant to a named symbol in a local workspace file. Source never leaves the machine.',
@@ -39,7 +49,7 @@ export function registerTypeLensTools(
     timeoutMs: config.explicitTimeoutMs,
     async execute(args, exec) {
       const { workspace } = workspaceOf(exec)
-      const result = await manager.analyzeContext({ workspace, file: args.file_path }, exec.signal)
+      const result = await access.manager.analyzeContext({ workspace, file: args.file_path }, exec.signal)
       const lower = args.name.toLowerCase()
       const blocks = result.text.split(/\n\n+/u).filter(block => block.toLowerCase().includes(lower))
       return { text: blocks.length > 0 ? blocks.join('\n\n') : `No declaration matching ${args.name} was found in the bounded context for ${result.file}.` }
@@ -54,7 +64,7 @@ export function registerTypeLensTools(
     timeoutMs: config.explicitTimeoutMs,
     async execute(args, exec) {
       const { workspace } = workspaceOf(exec)
-      const result = await manager.analyzeContext({ workspace, file: args.file_path }, exec.signal)
+      const result = await access.manager.analyzeContext({ workspace, file: args.file_path }, exec.signal)
       return { text: result.text || `No relevant declarations found for ${result.file}.` }
     },
   }))
@@ -67,7 +77,7 @@ export function registerTypeLensTools(
     timeoutMs: config.explicitTimeoutMs,
     async execute(args, exec) {
       const { workspace, sessionId } = workspaceOf(exec)
-      return { text: formatDiagnostics(await manager.analyzeDiagnostics({ workspace, file: args.file_path, sessionId }, exec.signal)) }
+      return { text: formatDiagnostics(await access.manager.analyzeDiagnostics({ workspace, file: args.file_path, sessionId }, exec.signal)) }
     },
   }))
 
@@ -78,10 +88,7 @@ export function registerTypeLensTools(
     output: TEXT_OUTPUT,
     isConcurrencySafe: () => true,
     async execute() {
-      return { text: JSON.stringify({
-        product: 'DSH TypeLens', version: '0.1.0', targetDsh: '0.1.1-rc.2',
-        localOnly: true, config, circuit: breaker.snapshot(), metrics: metrics.snapshot(),
-      }, null, 2) }
+      return { text: JSON.stringify(access.snapshot(), null, 2) }
     },
   }))
 }
