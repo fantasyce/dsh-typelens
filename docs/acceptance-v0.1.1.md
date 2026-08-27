@@ -51,9 +51,23 @@ fix:
 - A second real Agent session edited the synthetic fixture and immediately
   reported `TS2322: Type 'string' is not assignable to type 'boolean'.`
 
-The final v0.1.1 release artifact must repeat installation, Web health/UI,
-Headless hook, checksum, removal, and reinstall verification before publication
-is considered complete.
+## Published release acceptance
+
+The artifact downloaded back from the public v0.1.1 GitHub release passed its
+published SHA-256 checksum and the complete fresh-profile packed acceptance.
+That exact release URL was then installed into the formal local Web and
+Headless profiles without peer-dependency warnings.
+
+- The launchd-managed Web service restarted and `/api/typelens` reported a
+  healthy `0.1.1` runtime.
+- The native Chinese **Settings → TypeLens** panel showed **healthy · 0.1.1**,
+  its persisted settings remained `0600`, and browser warnings/errors were
+  empty.
+- A post-release real Headless Agent session read only `main.ts` and received
+  `Account { id: string; active: boolean }` from TypeLens without reading
+  `types.ts`.
+- A second post-release real Agent edit immediately received
+  `TS2322: Type 'string' is not assignable to type 'boolean'.`
 
 ## Boundaries
 
