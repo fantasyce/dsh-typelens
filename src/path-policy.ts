@@ -28,9 +28,10 @@ export async function resolveWorkspaceFile(
   config: TypeLensConfig,
   options: { mayNotExist?: boolean } = {},
 ): Promise<ResolvedWorkspaceFile> {
+  const requestedRoot = resolve(workspace)
   const root = await realpath(workspace)
-  const requested = isAbsolute(candidate) ? resolve(candidate) : resolve(root, candidate)
-  if (!config.allowOutsideWorkspace && !isContained(root, requested)) {
+  const requested = isAbsolute(candidate) ? resolve(candidate) : resolve(requestedRoot, candidate)
+  if (!config.allowOutsideWorkspace && !isContained(requestedRoot, requested)) {
     throw new PathPolicyError('outside-workspace', 'requested path is outside the session workspace')
   }
   let actual: string
@@ -53,5 +54,5 @@ export async function resolveWorkspaceFile(
   if (info?.size !== undefined && info.size > config.maxFileBytes) {
     throw new PathPolicyError('oversized-file', `${relativePath} is ${info.size} bytes`)
   }
-  return Object.freeze({ absolutePath: actual, relativePath, exists: info !== undefined, ...(info ? { size: info.size } : {}) })
+  return Object.freeze({ absolutePath: actual, relativePath, exists: info !== undefined, ...(info ? { size: Number(info.size) } : {}) })
 }
