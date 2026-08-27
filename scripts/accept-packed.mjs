@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 
 const args = process.argv.slice(2).filter(value => value !== '--')
-const archive = resolve(args[0] ?? 'artifacts/dsh-typelens-0.1.0.tgz')
+const archive = resolve(args[0] ?? 'artifacts/dsh-typelens-0.1.1.tgz')
 const root = args[1] ? resolve(args[1]) : await mkdtemp(join(tmpdir(), 'dsh-typelens-packed-'))
 const home = resolve(root, 'home')
 const evidence = resolve(root, 'evidence')
@@ -59,7 +59,7 @@ async function bootAndProbe(label) {
   try {
     const response = await waitFor(`http://127.0.0.1:${port}/api/typelens`, child)
     const snapshot = await response.json()
-    if (snapshot.product !== 'DSH TypeLens' || snapshot.version !== '0.1.0' || snapshot.analysisLocal !== true || snapshot.externalNetworkRequests !== false) {
+    if (snapshot.product !== 'DSH TypeLens' || snapshot.version !== '0.1.1' || snapshot.analysisLocal !== true || snapshot.externalNetworkRequests !== false) {
       throw new Error(`unexpected TypeLens snapshot: ${JSON.stringify(snapshot)}`)
     }
     const client = await (await waitFor(`http://127.0.0.1:${port}/plugins/dsh-typelens/client.js`, child)).text()

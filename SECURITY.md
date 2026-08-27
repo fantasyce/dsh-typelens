@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security fixes are provided for the latest published TypeLens release. Version 0.1.0 targets DSH 0.1.1-rc.2.
+Security fixes are provided for the latest published TypeLens release. Version 0.1.1 targets DSH 0.1.1-rc.2.
 
 ## Reporting
 

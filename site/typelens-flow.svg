@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" role="img">
+  <title>DSH TypeLens feedback loop</title>
+  <desc>A source read reveals an imported type declaration, while an edit returns an immediate diagnostic.</desc>
+  <rect width="760" height="420" fill="#eaf3f6"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+    <rect x="44" y="54" width="260" height="130" fill="#081a2b"/>
+    <text x="68" y="88" fill="#19d3c5" font-size="15">main.ts</text>
+    <text x="68" y="122" fill="#f7fbfa" font-size="15">import type { User }</text>
+    <text x="68" y="151" fill="#f7fbfa" font-size="15">const user: User = …</text>
+    <path d="M320 119H432" stroke="#ff6b35" stroke-width="4"/>
+    <path d="M420 108l14 11-14 11" fill="none" stroke="#ff6b35" stroke-width="4"/>
+    <rect x="450" y="54" width="266" height="130" fill="#fff" stroke="#718994" stroke-width="2"/>
+    <text x="474" y="88" fill="#067c74" font-size="14">TYPE CONTEXT</text>
+    <text x="474" y="122" fill="#081a2b" font-size="15">interface User {</text>
+    <text x="474" y="150" fill="#081a2b" font-size="15">  id: string</text>
+    <text x="474" y="174" fill="#081a2b" font-size="15">}</text>
+    <rect x="44" y="238" width="260" height="126" fill="#081a2b"/>
+    <text x="68" y="272" fill="#19d3c5" font-size="15">edit</text>
+    <text x="68" y="308" fill="#f7fbfa" font-size="15">id: 42</text>
+    <text x="68" y="338" fill="#f7fbfa" font-size="15">saved successfully</text>
+    <path d="M320 301H432" stroke="#ff6b35" stroke-width="4"/>
+    <path d="M420 290l14 11-14 11" fill="none" stroke="#ff6b35" stroke-width="4"/>
+    <rect x="450" y="238" width="266" height="126" fill="#fff" stroke="#718994" stroke-width="2"/>
+    <text x="474" y="272" fill="#d74613" font-size="14">DIAGNOSTIC</text>
+    <text x="474" y="308" fill="#081a2b" font-size="15">TS2322</text>
+    <text x="474" y="338" fill="#081a2b" font-size="14">number is not string</text>
+  </g>
+</svg>

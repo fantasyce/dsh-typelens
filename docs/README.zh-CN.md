@@ -7,11 +7,11 @@ DSH TypeLens 是 DeepSeek Harness 的本地类型上下文与代码诊断插件�
 ## 安装
 
 ```sh
-dsh plugin --profile web add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.0/dsh-typelens-0.1.0.tgz
-dsh plugin --profile headless add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.0/dsh-typelens-0.1.0.tgz
+dsh plugin --profile web add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
+dsh plugin --profile headless add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
 ```
 
-0.1.0 以 GitHub Release 压缩包为正式安装源；npm 发布完成后也可直接使用包名安装。
+0.1.1 以 GitHub Release 压缩包为正式安装源；npm 发布完成后也可直接使用包名安装。
 
 重启对应 profile 后，可用下列命令确认组合配置中存在 `typelens`：
 
@@ -24,9 +24,9 @@ Web 版可在「设置 → 类型透镜」中查看健康状态、请求与注�
 ## 支持范围
 
 - TypeScript、TSX、JavaScript、JSX；
-- Vue 与 Svelte 的脚本区块：优先使用可选编译器，缺失时退化为有边界的首个实例脚本提取；0.1.0 不分析模板语义；
+- Vue 与 Svelte 的脚本区块：优先使用可选编译器，缺失时退化为有边界的首个实例脚本提取；当前版本不分析模板语义；
 - `tsconfig.json`、`jsconfig.json`、路径别名、项目引用与常见 monorepo；
-- DSH 0.1.1-rc.2；macOS 为 0.1.0 实机验收平台，Linux 由 CI 覆盖 Node.js 22/24。
+- DSH 0.1.1-rc.2；macOS 为 0.1.1 实机验收平台，Linux 由 CI 覆盖 Node.js 22/24。
 
 ## 隐私与边界
 

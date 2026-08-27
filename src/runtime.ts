@@ -5,7 +5,7 @@ import { MetricsStore, type MetricsSnapshot } from './metrics.js'
 
 export interface RuntimeSnapshot {
   readonly product: 'DSH TypeLens'
-  readonly version: '0.1.0'
+  readonly version: '0.1.1'
   readonly targetDsh: '0.1.1-rc.2'
   readonly analysisLocal: true
   readonly externalNetworkRequests: false
@@ -48,7 +48,7 @@ export class TypeLensRuntime {
 
   snapshot(): RuntimeSnapshot {
     return Object.freeze({
-      product: 'DSH TypeLens', version: '0.1.0', targetDsh: '0.1.1-rc.2', analysisLocal: true, externalNetworkRequests: false,
+      product: 'DSH TypeLens', version: '0.1.1', targetDsh: '0.1.1-rc.2', analysisLocal: true, externalNetworkRequests: false,
       config: this.#config, circuit: this.breaker.snapshot(), metrics: this.metrics.snapshot(),
     })
   }
