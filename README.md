@@ -15,16 +15,16 @@ TypeLens watches successful DSH file reads and edits. After a read, it appends o
 
 ## Compatibility
 
-Version 0.1.0 is acceptance-tested with DSH 0.1.1-rc.2 on macOS arm64. GitHub CI covers Linux with Node.js 22 and 24. TypeScript, TSX, JavaScript, and JSX are supported. Vue and Svelte script blocks use their optional compiler when available and retain a bounded first-instance-script fallback when it is absent. Template semantics are outside the 0.1.0 analysis boundary. Windows is a compatibility target but is not a 0.1.0 release gate.
+Version 0.1.1 is acceptance-tested with DSH 0.1.1-rc.2 on macOS arm64. GitHub CI covers Linux with Node.js 22 and 24. TypeScript, TSX, JavaScript, and JSX are supported. Vue and Svelte script blocks use their optional compiler when available and retain a bounded first-instance-script fallback when it is absent. Template semantics are outside the current analysis boundary. Windows is a compatibility target but is not a 0.1.1 release gate.
 
 ## Install
 
 ```sh
-dsh plugin --profile web add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.0/dsh-typelens-0.1.0.tgz
-dsh plugin --profile headless add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.0/dsh-typelens-0.1.0.tgz
+dsh plugin --profile web add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
+dsh plugin --profile headless add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
 ```
 
-The release tarball is the canonical 0.1.0 install source. The shorter `dsh plugin --profile web add dsh-typelens` form becomes available after npm publication.
+The release tarball is the canonical 0.1.1 install source. The shorter `dsh plugin --profile web add dsh-typelens` form becomes available after npm publication.
 
 Restart the affected DSH profile, then verify the composed row:
 
@@ -54,6 +54,7 @@ All returned paths are workspace-relative. Explicit file tools require an active
 Automatic context is limited to 800 estimated tokens, depth 4, 1.5 seconds, and 2 MiB files. Explicit checks receive 5 seconds. A circuit breaker pauses automatic analysis for 30 seconds after five operational failures in 60 seconds; explicit tools and health remain available. Dependency trees, build output, VCS metadata, coverage, and environment files are denied by default.
 
 See [configuration](docs/configuration.md), [troubleshooting](docs/troubleshooting.md), and the [Chinese guide](docs/README.zh-CN.md).
+The current release gate is recorded in [v0.1.1 acceptance](docs/acceptance-v0.1.1.md).
 
 ## Development
 

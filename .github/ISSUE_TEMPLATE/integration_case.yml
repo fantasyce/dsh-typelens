@@ -1,0 +1,32 @@
+name: Integration or adapter case
+description: Propose a synthetic framework, workspace, or DSH compatibility case.
+title: "integration: "
+labels: [enhancement]
+body:
+  - type: input
+    id: ecosystem
+    attributes:
+      label: Language, framework, or workspace shape
+      placeholder: Vue SFC, Svelte component, pnpm monorepo, JavaScript project
+    validations:
+      required: true
+  - type: textarea
+    id: need
+    attributes:
+      label: Missing type context or diagnostic behavior
+    validations:
+      required: true
+  - type: textarea
+    id: fixture
+    attributes:
+      label: Small synthetic fixture
+      description: Link a public fixture or paste a minimal non-proprietary example.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: This case contains no secrets, private paths, proprietary source, or model-provider data.
+          required: true

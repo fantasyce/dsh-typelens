@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Automatic bounded type context and edit diagnostics for DeepSeek Harness.">
+  <title>DSH TypeLens</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="masthead">
+    <a class="wordmark" href="./"><span>TL</span> DSH TypeLens</a>
+    <nav aria-label="Primary navigation">
+      <a href="https://github.com/fantasyce/dsh-typelens/blob/main/docs/quickstart.md">Quickstart</a>
+      <a href="https://github.com/fantasyce/dsh-typelens/releases/latest">Install</a>
+      <a href="https://github.com/fantasyce/dsh-typelens">Source</a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Type-aware DeepSeek Harness</p>
+        <h1>Give coding Agents the type context they were missing.</h1>
+        <p class="lede">Complete imported declarations after reads. Changed-file-first diagnostics after edits. Bounded, fail-open, and integrated directly into DSH.</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/fantasyce/dsh-typelens/releases/latest">Install the latest release</a>
+          <a class="button" href="https://github.com/fantasyce/dsh-typelens/blob/main/docs/quickstart.md">Open the quickstart</a>
+        </div>
+      </div>
+      <figure class="flow-card">
+        <img src="typelens-flow.svg" alt="A source read receives imported type context and an edit receives an immediate TypeScript diagnostic.">
+        <figcaption>TypeLens closes both sides of the coding loop without replacing the original DSH tool result.</figcaption>
+      </figure>
+    </section>
+    <section class="capabilities">
+      <p class="eyebrow">Automatic and explicit</p>
+      <h2>Useful context, kept inside hard limits.</h2>
+      <div class="grid">
+        <article><h3>Read with context</h3><p>Ranked, deduplicated, cycle-safe declarations that are never cut mid-signature.</p></article>
+        <article><h3>Edit with feedback</h3><p>Changed-file-first TypeScript diagnostics appear immediately after writes and edits.</p></article>
+        <article><h3>Inspect on demand</h3><p>Lookup, list, check, and explain tools cover explicit Agent workflows.</p></article>
+        <article><h3>Bounded by default</h3><p>Workspace containment, source caps, token budgets, LRU limits, deadlines, and a circuit breaker.</p></article>
+      </div>
+    </section>
+    <section class="quickstart">
+      <div><p class="eyebrow">Install</p><h2>One profile command.</h2></div>
+      <pre><code>dsh plugin --profile web add \
+  https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz</code></pre>
+    </section>
+    <section class="boundary">
+      <div><p class="eyebrow">Privacy boundary</p><h2>Local analysis, explicit provider boundary.</h2></div>
+      <p>TypeLens itself makes no external network requests and persists no source-bearing analysis cache. Context appended to an Agent step follows the DSH model provider you configured.</p>
+    </section>
+  </main>
+  <footer><p>MIT · No tracking · No external page dependencies</p><nav><a href="https://github.com/fantasyce/dsh-typelens/issues">Issues</a><a href="https://github.com/fantasyce/dsh-typelens/discussions">Discussions</a></nav></footer>
+</body>
+</html>
