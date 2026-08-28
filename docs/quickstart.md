@@ -21,6 +21,18 @@ dsh --profile web --dump-config | grep -A2 typelens
 Open DSH Web, choose **Settings → TypeLens**, and confirm the health row reports
 `0.1.1`.
 
+## Upgrade
+
+Update every profile that has TypeLens installed:
+
+```sh
+dsh plugin --profile web update dsh-typelens --latest
+dsh plugin --profile headless update dsh-typelens --latest
+```
+
+Restart the affected profile and repeat the composed-row and health checks
+above. Omit the upgrade when policy requires the currently pinned release.
+
 ## What happens automatically
 
 When the Agent successfully reads a supported source file, TypeLens appends

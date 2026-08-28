@@ -48,6 +48,20 @@ dsh --profile web --dump-config
 
 The package bundle inserts a `typelens` row automatically. In DSH Web, open Settings → TypeLens to inspect health, change automatic behavior and limits, or reset in-memory caches and counters.
 
+## Upgrade
+
+Update each profile where TypeLens is installed, then restart that profile so
+the running Host and client load the new package bytes:
+
+```sh
+dsh plugin --profile web update dsh-typelens --latest
+dsh plugin --profile headless update dsh-typelens --latest
+```
+
+Use `dsh --profile web --dump-config` after restart to confirm the composed
+`typelens` row. To remain on an approved release, keep the pinned dependency
+instead of using `--latest`.
+
 To remove it:
 
 ```sh

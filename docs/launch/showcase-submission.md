@@ -22,3 +22,18 @@ into a failure.
 **Website:** https://fantasyce.github.io/dsh-typelens/
 
 **Release:** https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.1
+
+**Install:**
+
+```sh
+dsh plugin --profile web add dsh-typelens
+```
+
+**Upgrade:**
+
+```sh
+dsh plugin --profile web update dsh-typelens --latest
+```
+
+Restart the Web profile after installation or upgrade. Replace `web` with
+`headless` for the Headless profile.
