@@ -7,8 +7,10 @@ DSH's plugin manager requires `pnpm`. Confirm that `dsh --version` and
 missing, use the [official pnpm installation guide](https://pnpm.io/installation).
 
 ```sh
-dsh plugin --profile web add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
+dsh plugin --profile web add dsh-typelens
 ```
+
+Use `dsh-typelens@0.1.1` when the profile must remain pinned to this release.
 
 Restart the Web profile and confirm the composed row:
 

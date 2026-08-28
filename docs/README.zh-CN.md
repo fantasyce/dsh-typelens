@@ -11,11 +11,11 @@ DSH 的插件管理器依赖 `pnpm`。安装插件前，请确认 `dsh --version
 [pnpm 官方安装指南](https://pnpm.io/installation)完成安装。
 
 ```sh
-dsh plugin --profile web add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
-dsh plugin --profile headless add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
+dsh plugin --profile web add dsh-typelens
+dsh plugin --profile headless add dsh-typelens
 ```
 
-0.1.1 以 GitHub Release 压缩包为正式安装源；npm 发布完成后也可直接使用包名安装。
+npm 包是正式安装源。需要固定当前版本时可使用 `dsh-typelens@0.1.1`；需要明确归档地址时仍可使用经过验证的 GitHub Release 压缩包。
 
 重启对应 profile 后，可用下列命令确认组合配置中存在 `typelens`：
 
