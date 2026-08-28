@@ -44,8 +44,11 @@
       </div>
     </section>
     <section class="quickstart">
-      <div><p class="eyebrow">Install</p><h2>One profile command.</h2></div>
-      <pre><code>dsh plugin --profile web add dsh-typelens</code></pre>
+      <div><p class="eyebrow">Install and upgrade</p><h2>One command per profile.</h2><p>Restart the affected DSH profile after either operation.</p></div>
+      <div>
+        <pre><code>dsh plugin --profile web add dsh-typelens</code></pre>
+        <pre><code>dsh plugin --profile web update dsh-typelens --latest</code></pre>
+      </div>
     </section>
     <section class="boundary">
       <div><p class="eyebrow">Privacy boundary</p><h2>Local analysis, explicit provider boundary.</h2></div>

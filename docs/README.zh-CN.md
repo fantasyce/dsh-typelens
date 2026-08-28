@@ -25,6 +25,18 @@ dsh --profile web --dump-config
 
 Web 版可在「设置 → 类型透镜」中查看健康状态、请求与注入计数，分别开关自动读取上下文和自动编辑诊断，并调整预算。设置只有通过完整校验后才会原子写入；非法设置不会覆盖上一次有效配置。
 
+## 升级
+
+在每个已安装 TypeLens 的 profile 中执行升级：
+
+```sh
+dsh plugin --profile web update dsh-typelens --latest
+dsh plugin --profile headless update dsh-typelens --latest
+```
+
+随后重启对应 profile，并再次检查组合配置与健康状态。如果组织策略要求固定
+已批准版本，则保留固定版本依赖，不要使用 `--latest`。
+
 ## 支持范围
 
 - TypeScript、TSX、JavaScript、JSX；

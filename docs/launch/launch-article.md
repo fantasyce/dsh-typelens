@@ -22,6 +22,16 @@ The privacy boundary is explicit: TypeLens itself makes no external network
 requests and persists no source-bearing analysis cache. Any context appended to
 an Agent step follows the DSH model provider the user configured.
 
+Install or upgrade the npm package in a DSH Web profile, then restart that
+profile:
+
+```sh
+dsh plugin --profile web add dsh-typelens
+dsh plugin --profile web update dsh-typelens --latest
+```
+
+The same commands work for one-shot Agents by replacing `web` with `headless`.
+
 Start with the [quickstart](https://github.com/fantasyce/dsh-typelens/blob/main/docs/quickstart.md),
 inspect the [configuration reference](https://github.com/fantasyce/dsh-typelens/blob/main/docs/configuration.md),
 or download the [latest release](https://github.com/fantasyce/dsh-typelens/releases/latest).

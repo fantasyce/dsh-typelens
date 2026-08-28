@@ -36,6 +36,14 @@ returned `TS2322` immediately.
 Quickstart: https://github.com/fantasyce/dsh-typelens/blob/main/docs/quickstart.md
 Release: https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.1
 
+```bash
+# Install from npm
+dsh plugin --profile web add dsh-typelens
+
+# Upgrade later, then restart the Web profile
+dsh plugin --profile web update dsh-typelens --latest
+```
+
 ## Reddit
 
 **Title:** Open-source automatic type context and edit diagnostics for DeepSeek Harness
