@@ -15,7 +15,7 @@ dsh plugin --profile web add dsh-typelens
 dsh plugin --profile headless add dsh-typelens
 ```
 
-npm 包是正式安装源。需要固定当前版本时可使用 `dsh-typelens@0.1.1`；需要明确归档地址时仍可使用经过验证的 GitHub Release 压缩包。
+npm 包是正式安装源。需要固定当前版本时可使用 `dsh-typelens@0.1.2`；需要明确归档地址时仍可使用经过验证的 GitHub Release 压缩包。
 
 重启对应 profile 后，可用下列命令确认组合配置中存在 `typelens`：
 
@@ -42,7 +42,7 @@ dsh plugin --profile headless update dsh-typelens --latest
 - TypeScript、TSX、JavaScript、JSX；
 - Vue 与 Svelte 的脚本区块：优先使用可选编译器，缺失时退化为有边界的首个实例脚本提取；当前版本不分析模板语义；
 - `tsconfig.json`、`jsconfig.json`、路径别名、项目引用与常见 monorepo；
-- DSH 0.1.1-rc.2；macOS 为 0.1.1 实机验收平台，Linux 由 CI 覆盖 Node.js 22/24。
+- DSH 0.1.1-rc.2；macOS 为 0.1.2 实机验收平台，Linux 由 CI 覆盖 Node.js 22/24。
 
 ## 隐私与边界
 

@@ -44,7 +44,7 @@ export function registerTypeLensTools(
         get manager() { return runtimeOrManager as ProjectManager },
         get config() { return legacyConfig },
         breaker: legacyBreaker!, metrics: legacyMetrics!,
-        snapshot: () => ({ product: 'DSH TypeLens', version: '0.1.1', targetDsh: '0.1.1-rc.2', analysisLocal: true, externalNetworkRequests: false, config: legacyConfig, circuit: legacyBreaker!.snapshot(), metrics: legacyMetrics!.snapshot() }),
+        snapshot: () => ({ product: 'DSH TypeLens', version: '0.1.2', targetDsh: '0.1.1-rc.2', analysisLocal: true, externalNetworkRequests: false, config: legacyConfig, circuit: legacyBreaker!.snapshot(), metrics: legacyMetrics!.snapshot() }),
       }
   const config = access.config
   ctx.tools.register(defineTool({

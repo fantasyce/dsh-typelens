@@ -32,4 +32,4 @@ jobs:
       - run: pnpm audit --prod --audit-level high
       - run: pnpm run check:secrets
       - run: pnpm pack --pack-destination artifacts
-      - run: pnpm run audit:package -- artifacts/dsh-typelens-0.1.1.tgz
+      - run: pnpm run audit:package -- artifacts/dsh-typelens-0.1.2.tgz

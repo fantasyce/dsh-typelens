@@ -10,7 +10,7 @@ missing, use the [official pnpm installation guide](https://pnpm.io/installation
 dsh plugin --profile web add dsh-typelens
 ```
 
-Use `dsh-typelens@0.1.1` when the profile must remain pinned to this release.
+Use `dsh-typelens@0.1.2` when the profile must remain pinned to this release.
 
 Restart the Web profile and confirm the composed row:
 
@@ -19,7 +19,7 @@ dsh --profile web --dump-config | grep -A2 typelens
 ```
 
 Open DSH Web, choose **Settings → TypeLens**, and confirm the health row reports
-`0.1.1`.
+`0.1.2`.
 
 ## Upgrade
 

@@ -34,6 +34,12 @@ for (const [label, surface] of [
 }
 
 const publish = await readFile(new URL('../.github/workflows/publish-npm.yml', import.meta.url), 'utf8')
+const ci = await readFile(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')
+const packageManifest = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'))
+const releaseArchive = `artifacts/dsh-typelens-${packageManifest.version}.tgz`
+if (!ci.includes(`pnpm run audit:package -- ${releaseArchive}`)) {
+  throw new Error(`CI package audit is not aligned with ${releaseArchive}`)
+}
 for (const requiredText of ['release:', 'types: [published]', 'id-token: write', 'pnpm verify', 'npm publish --access public --provenance']) {
   if (!publish.includes(requiredText)) throw new Error(`npm publish workflow missing ${requiredText}`)
 }
@@ -42,7 +48,7 @@ for (const forbidden of ['NPM_TOKEN', 'NODE_AUTH_TOKEN']) {
 }
 
 const manifest = JSON.parse(await readFile(new URL('../docs/launch/launch-manifest.json', import.meta.url), 'utf8'))
-if (manifest.release !== 'v0.1.1') throw new Error('launch manifest release mismatch')
+if (manifest.release !== 'v0.1.2') throw new Error('launch manifest release mismatch')
 const ids = manifest.channels.map(channel => channel.id)
 if (new Set(ids).size !== ids.length) throw new Error('duplicate launch channel id')
 for (const id of ['github-release', 'github-pages', 'github-discussion', 'github-issues', 'reddit', 'x', 'linkedin']) {

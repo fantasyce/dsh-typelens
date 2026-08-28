@@ -21,7 +21,7 @@ into a failure.
 
 **Website:** https://fantasyce.github.io/dsh-typelens/
 
-**Release:** https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.1
+**Release:** https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.2
 
 **Install:**
 

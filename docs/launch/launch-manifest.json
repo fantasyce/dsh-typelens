@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "release": "v0.1.1",
+  "release": "v0.1.2",
   "prepared_at": "2026-08-28T02:30:00+08:00",
   "finalized_at": "2026-08-28T09:28:00+08:00",
   "channels": [
-    {"id":"github-release","target":"https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.1","copy":"release notes","status":"published"},
+    {"id":"github-release","target":"https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.2","copy":"release notes","status":"published"},
     {"id":"npm-registry","target":"https://www.npmjs.com/package/dsh-typelens","copy":"package.json","status":"published"},
     {"id":"github-pages","target":"https://fantasyce.github.io/dsh-typelens/","copy":"site/","status":"published"},
     {"id":"github-discussion","target":"https://github.com/fantasyce/dsh-typelens/discussions/2","copy":"docs/launch/launch-article.md","status":"published"},
