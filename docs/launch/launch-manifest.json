@@ -2,7 +2,7 @@
   "schema_version": 1,
   "release": "v0.1.1",
   "prepared_at": "2026-08-28T02:30:00+08:00",
-  "finalized_at": "2026-08-28T02:52:00+08:00",
+  "finalized_at": "2026-08-28T09:28:00+08:00",
   "channels": [
     {"id":"github-release","target":"https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.1","copy":"release notes","status":"published"},
     {"id":"github-pages","target":"https://fantasyce.github.io/dsh-typelens/","copy":"site/","status":"published"},
@@ -12,7 +12,7 @@
     {"id":"reddit","target":"relevant subreddit","copy":"docs/launch/community-posts.md#reddit","status":"not-posted"},
     {"id":"x","target":"maintainer account","copy":"docs/launch/community-posts.md#x","status":"not-posted"},
     {"id":"linkedin","target":"maintainer account","copy":"docs/launch/community-posts.md#linkedin","status":"not-posted"},
-    {"id":"showcase","target":"applicable developer showcase","copy":"docs/launch/showcase-submission.md","status":"prepared"},
+    {"id":"showcase","target":"https://github.com/deepseek-ai/deepseek-harness/discussions/4816","copy":"DSH Show Your Plugins post with v0.1.1 settings screenshot","status":"published"},
     {"id":"design-partners","target":"https://github.com/fantasyce/dsh-typelens/issues/4","copy":"docs/launch/maintainer-outreach.md","status":"published"}
   ]
 }
