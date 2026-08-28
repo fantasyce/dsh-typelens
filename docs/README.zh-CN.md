@@ -6,6 +6,10 @@ DSH TypeLens 是 DeepSeek Harness 的本地类型上下文与代码诊断插件�
 
 ## 安装
 
+DSH 的插件管理器依赖 `pnpm`。安装插件前，请确认 `dsh --version` 和
+`pnpm --version` 都能正常执行；如果缺少 `pnpm`，请先按照
+[pnpm 官方安装指南](https://pnpm.io/installation)完成安装。
+
 ```sh
 dsh plugin --profile web add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
 dsh plugin --profile headless add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
