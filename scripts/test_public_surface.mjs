@@ -34,6 +34,12 @@ for (const [label, surface] of [
 }
 
 const publish = await readFile(new URL('../.github/workflows/publish-npm.yml', import.meta.url), 'utf8')
+const ci = await readFile(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8')
+const packageManifest = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'))
+const releaseArchive = `artifacts/dsh-typelens-${packageManifest.version}.tgz`
+if (!ci.includes(`pnpm run audit:package -- ${releaseArchive}`)) {
+  throw new Error(`CI package audit is not aligned with ${releaseArchive}`)
+}
 for (const requiredText of ['release:', 'types: [published]', 'id-token: write', 'pnpm verify', 'npm publish --access public --provenance']) {
   if (!publish.includes(requiredText)) throw new Error(`npm publish workflow missing ${requiredText}`)
 }
