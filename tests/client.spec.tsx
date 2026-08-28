@@ -7,7 +7,7 @@ import { apply } from '../src/client/index.js'
 import { zh } from '../src/client/locales.js'
 
 const snapshot = {
-  product: 'DSH TypeLens', version: '0.1.1', targetDsh: '0.1.1-rc.2', analysisLocal: true, externalNetworkRequests: false,
+  product: 'DSH TypeLens', version: '0.1.2', targetDsh: '0.1.1-rc.2', analysisLocal: true, externalNetworkRequests: false,
   config: {
     automaticContext: true, automaticDiagnostics: true, contextTokenBudget: 800, maxDepth: 4,
     automaticTimeoutMs: 1500, explicitTimeoutMs: 5000, maxFileBytes: 2097152, maxDiagnostics: 40,
@@ -43,7 +43,7 @@ describe('TypeLens Web settings', () => {
     vi.stubGlobal('fetch', fetchMock)
     const user = userEvent.setup()
     render(<TypeLensSettings />)
-    expect(await screen.findByText('0.1.1')).toBeTruthy()
+    expect(await screen.findByText('0.1.2')).toBeTruthy()
     await user.click(screen.getByRole('checkbox', { name: 'Automatic read context' }))
     const budget = screen.getByRole('spinbutton', { name: 'Context token budget' })
     await user.clear(budget); await user.type(budget, '1200')
@@ -62,7 +62,7 @@ describe('TypeLens Web settings', () => {
       .mockResolvedValueOnce(new Response(JSON.stringify({ error: 'contextTokenBudget invalid' }), { status: 400 })))
     const user = userEvent.setup()
     render(<TypeLensSettings />)
-    await screen.findByText('0.1.1')
+    await screen.findByText('0.1.2')
     await user.click(screen.getByRole('button', { name: 'Save settings' }))
     expect((await screen.findByRole('alert')).textContent).toContain('contextTokenBudget invalid')
   })

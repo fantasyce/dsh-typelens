@@ -2,6 +2,15 @@
 
 All notable changes are documented here.
 
+## 0.1.2 — 2026-08-28
+
+- Make npm the canonical installation source throughout the public product
+  surface.
+- Publish explicit Web and Headless profile upgrade commands, restart guidance,
+  and pinned-version policy notes.
+- Add regression checks so repository, website, and community launch copy cannot
+  omit the canonical install or upgrade commands.
+
 ## 0.1.1 — 2026-08-28
 
 - Mark DSH-provided runtime peers as optional at profile-install time so the

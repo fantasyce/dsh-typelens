@@ -15,7 +15,7 @@ TypeLens watches successful DSH file reads and edits. After a read, it appends o
 
 ## Compatibility
 
-Version 0.1.1 is acceptance-tested with DSH 0.1.1-rc.2 on macOS arm64. GitHub CI covers Linux with Node.js 22 and 24. TypeScript, TSX, JavaScript, and JSX are supported. Vue and Svelte script blocks use their optional compiler when available and retain a bounded first-instance-script fallback when it is absent. Template semantics are outside the current analysis boundary. Windows is a compatibility target but is not a 0.1.1 release gate.
+Version 0.1.2 is acceptance-tested with DSH 0.1.1-rc.2 on macOS arm64. GitHub CI covers Linux with Node.js 22 and 24. TypeScript, TSX, JavaScript, and JSX are supported. Vue and Svelte script blocks use their optional compiler when available and retain a bounded first-instance-script fallback when it is absent. Template semantics are outside the current analysis boundary. Windows is a compatibility target but is not a 0.1.2 release gate.
 
 ## Install
 
@@ -35,9 +35,9 @@ dsh plugin --profile web add dsh-typelens
 dsh plugin --profile headless add dsh-typelens
 ```
 
-The npm package is the canonical install source. Use `dsh-typelens@0.1.1` to
+The npm package is the canonical install source. Use `dsh-typelens@0.1.2` to
 pin this release, or use the verified
-[GitHub release tarball](https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.1)
+[GitHub release tarball](https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.2)
 when an explicit archive URL is required.
 
 Restart the affected DSH profile, then verify the composed row:
@@ -82,7 +82,7 @@ All returned paths are workspace-relative. Explicit file tools require an active
 Automatic context is limited to 800 estimated tokens, depth 4, 1.5 seconds, and 2 MiB files. Explicit checks receive 5 seconds. A circuit breaker pauses automatic analysis for 30 seconds after five operational failures in 60 seconds; explicit tools and health remain available. Dependency trees, build output, VCS metadata, coverage, and environment files are denied by default.
 
 See [configuration](docs/configuration.md), [troubleshooting](docs/troubleshooting.md), and the [Chinese guide](docs/README.zh-CN.md).
-The current release gate is recorded in [v0.1.1 acceptance](docs/acceptance-v0.1.1.md).
+The current release gate is recorded in [v0.1.2 acceptance](docs/acceptance-v0.1.2.md).
 
 ## Development
 

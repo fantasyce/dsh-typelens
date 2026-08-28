@@ -20,11 +20,11 @@ TypeLens itself makes no external network requests and persists no
 source-bearing analysis cache. MIT licensed.
 
 Source: https://github.com/fantasyce/dsh-typelens
-Release: https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.1
+Release: https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.2
 
 ## DeepSeek Harness community
 
-DSH TypeLens v0.1.1 adds automatic bounded type context after reads and
+DSH TypeLens v0.1.2 adds automatic bounded type context after reads and
 changed-file-first TypeScript diagnostics after edits. Four explicit tools and
 a native DSH Web settings/health section are included.
 
@@ -34,7 +34,7 @@ received the imported `Account` interface from TypeLens; a second edit
 returned `TS2322` immediately.
 
 Quickstart: https://github.com/fantasyce/dsh-typelens/blob/main/docs/quickstart.md
-Release: https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.1
+Release: https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.2
 
 ```bash
 # Install from npm
@@ -82,4 +82,4 @@ DSH TypeLens 为 DeepSeek Harness 补上了编码 Agent 的类型反馈闭环：
 脚本区块。
 
 源码：https://github.com/fantasyce/dsh-typelens
-正式版本：https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.1
+正式版本：https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.2

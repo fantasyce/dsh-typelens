@@ -2,7 +2,7 @@
 
 ## The plugin row is absent
 
-Run `dsh --profile web --dump-config`. If `typelens` is missing, install the release tarball into that exact profile with `dsh plugin --profile web add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz`, then restart it. DSH profiles have independent dependency trees.
+Run `dsh --profile web --dump-config`. If `typelens` is missing, install the npm package into that exact profile with `dsh plugin --profile web add dsh-typelens`, then restart it. Use `dsh-typelens@0.1.2` when policy requires the current release to remain pinned. DSH profiles have independent dependency trees.
 
 ## Web settings do not appear
 

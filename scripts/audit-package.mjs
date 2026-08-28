@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 
 const archiveArg = process.argv.slice(2).find(value => value !== '--')
-const archive = resolve(archiveArg ?? 'artifacts/dsh-typelens-0.1.1.tgz')
+const archive = resolve(archiveArg ?? 'artifacts/dsh-typelens-0.1.2.tgz')
 const listed = spawnSync('tar', ['-tzf', archive], { encoding: 'utf8' })
 if (listed.status !== 0) throw new Error(listed.stderr || `unable to inspect ${archive}`)
 const files = listed.stdout.trim().split('\n').filter(Boolean)

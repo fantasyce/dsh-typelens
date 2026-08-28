@@ -1,6 +1,6 @@
 {
   "name": "dsh-typelens",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Automatic, bounded type context and edit diagnostics for DeepSeek Harness",
   "type": "module",
   "main": "lib/index.js",
@@ -28,7 +28,7 @@
     "accept:packed": "node scripts/accept-packed.mjs",
     "test:site": "bash scripts/test_site.sh",
     "test:public": "node scripts/test_public_surface.mjs",
-    "verify": "pnpm typecheck && pnpm test && pnpm test:site && pnpm test:public && pnpm build && pnpm check:secrets && pnpm pack --pack-destination artifacts && pnpm audit:package -- artifacts/dsh-typelens-0.1.1.tgz"
+    "verify": "pnpm typecheck && pnpm test && pnpm test:site && pnpm test:public && pnpm build && pnpm check:secrets && pnpm pack --pack-destination artifacts && pnpm audit:package -- artifacts/dsh-typelens-0.1.2.tgz"
   },
   "engines": { "node": "^22.19.0 || >=24.0.0" },
   "keywords": ["deepseek", "deepseek-harness", "dsh", "dsh-plugin", "typescript", "lsp", "coding-agent"],

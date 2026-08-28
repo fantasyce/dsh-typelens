@@ -42,7 +42,7 @@ for (const forbidden of ['NPM_TOKEN', 'NODE_AUTH_TOKEN']) {
 }
 
 const manifest = JSON.parse(await readFile(new URL('../docs/launch/launch-manifest.json', import.meta.url), 'utf8'))
-if (manifest.release !== 'v0.1.1') throw new Error('launch manifest release mismatch')
+if (manifest.release !== 'v0.1.2') throw new Error('launch manifest release mismatch')
 const ids = manifest.channels.map(channel => channel.id)
 if (new Set(ids).size !== ids.length) throw new Error('duplicate launch channel id')
 for (const id of ['github-release', 'github-pages', 'github-discussion', 'github-issues', 'reddit', 'x', 'linkedin']) {
