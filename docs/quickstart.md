@@ -2,6 +2,10 @@
 
 ## Install
 
+DSH's plugin manager requires `pnpm`. Confirm that `dsh --version` and
+`pnpm --version` both succeed before installing the package. If `pnpm` is
+missing, use the [official pnpm installation guide](https://pnpm.io/installation).
+
 ```sh
 dsh plugin --profile web add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
 ```

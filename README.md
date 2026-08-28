@@ -19,6 +19,17 @@ Version 0.1.1 is acceptance-tested with DSH 0.1.1-rc.2 on macOS arm64. GitHub CI
 
 ## Install
 
+DSH delegates profile dependency management to `pnpm`. Confirm that both
+commands are available before installing a plugin:
+
+```sh
+dsh --version
+pnpm --version
+```
+
+If `pnpm` is missing, install it using the
+[official pnpm installation guide](https://pnpm.io/installation), then run:
+
 ```sh
 dsh plugin --profile web add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
 dsh plugin --profile headless add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
@@ -65,6 +76,16 @@ pnpm verify
 ```
 
 `pnpm verify` type-checks, runs the complete test suite, builds both Host and DSH client artifacts, scans for secrets, audits package contents, and creates the tarball under `artifacts/`.
+
+## Agent Reliability Toolkit
+
+TypeLens is one independent part of a small, local-first reliability toolkit:
+
+- [Agent Runtime Proof](https://github.com/fantasyce/agent-runtime-proof) verifies that a live Agent or MCP runtime matches the artifact you approved.
+- [Agent Residue Evidence](https://github.com/fantasyce/agent-residue-evidence) records task-scoped files, processes, and listening ports left by tests and builds.
+- [DSH TypeLens](https://github.com/fantasyce/dsh-typelens) adds bounded type context and edit diagnostics to DeepSeek Harness.
+
+Each project remains separately installable and keeps its own trust boundary.
 
 ## Security and privacy
 
