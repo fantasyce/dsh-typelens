@@ -4,11 +4,29 @@ const required = [
   'README.md', 'LICENSE', 'SECURITY.md', 'SUPPORT.md', 'CONTRIBUTING.md',
   'CODE_OF_CONDUCT.md', '.github/ISSUE_TEMPLATE/bug_report.yml',
   '.github/ISSUE_TEMPLATE/integration_case.yml',
-  '.github/pull_request_template.md', 'docs/quickstart.md',
+  '.github/pull_request_template.md', '.github/workflows/publish-npm.yml',
+  'docs/quickstart.md',
   'docs/launch/community-posts.md', 'docs/launch/faq.md',
   'docs/launch/launch-article.md', 'docs/launch/launch-manifest.json',
 ]
 for (const path of required) await readFile(new URL(`../${path}`, import.meta.url), 'utf8')
+
+const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8')
+const quickstart = await readFile(new URL('../docs/quickstart.md', import.meta.url), 'utf8')
+const chineseGuide = await readFile(new URL('../docs/README.zh-CN.md', import.meta.url), 'utf8')
+const site = await readFile(new URL('../site/index.html', import.meta.url), 'utf8')
+const npmInstall = 'dsh plugin --profile web add dsh-typelens'
+for (const [label, surface] of [['README', readme], ['quickstart', quickstart], ['Chinese guide', chineseGuide], ['site', site]]) {
+  if (!surface.includes(npmInstall)) throw new Error(`${label} missing canonical npm install command`)
+}
+
+const publish = await readFile(new URL('../.github/workflows/publish-npm.yml', import.meta.url), 'utf8')
+for (const requiredText of ['release:', 'types: [published]', 'id-token: write', 'pnpm verify', 'npm publish --access public --provenance']) {
+  if (!publish.includes(requiredText)) throw new Error(`npm publish workflow missing ${requiredText}`)
+}
+for (const forbidden of ['NPM_TOKEN', 'NODE_AUTH_TOKEN']) {
+  if (publish.includes(forbidden)) throw new Error(`npm publish workflow must not use ${forbidden}`)
+}
 
 const manifest = JSON.parse(await readFile(new URL('../docs/launch/launch-manifest.json', import.meta.url), 'utf8'))
 if (manifest.release !== 'v0.1.1') throw new Error('launch manifest release mismatch')

@@ -31,11 +31,14 @@ If `pnpm` is missing, install it using the
 [official pnpm installation guide](https://pnpm.io/installation), then run:
 
 ```sh
-dsh plugin --profile web add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
-dsh plugin --profile headless add https://github.com/fantasyce/dsh-typelens/releases/download/v0.1.1/dsh-typelens-0.1.1.tgz
+dsh plugin --profile web add dsh-typelens
+dsh plugin --profile headless add dsh-typelens
 ```
 
-The release tarball is the canonical 0.1.1 install source. The shorter `dsh plugin --profile web add dsh-typelens` form becomes available after npm publication.
+The npm package is the canonical install source. Use `dsh-typelens@0.1.1` to
+pin this release, or use the verified
+[GitHub release tarball](https://github.com/fantasyce/dsh-typelens/releases/tag/v0.1.1)
+when an explicit archive URL is required.
 
 Restart the affected DSH profile, then verify the composed row:
 

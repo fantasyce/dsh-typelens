@@ -11,7 +11,7 @@ for landmark in header main footer nav; do grep -Eq "<$landmark([ >])" "$index";
 grep -Fq 'Give coding Agents the type context they were missing.' "$index"
 grep -Fq 'name="viewport"' "$index"
 grep -Fq 'docs/quickstart.md' "$index"
-grep -Fq 'releases/latest' "$index"
+grep -Fq 'www.npmjs.com/package/dsh-typelens' "$index"
 grep -Fq 'github.com/fantasyce/dsh-typelens' "$index"
 grep -Fq '<title' "$repo_dir/site/typelens-flow.svg"
 grep -Fq '<desc' "$repo_dir/site/typelens-flow.svg"
