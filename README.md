@@ -84,6 +84,13 @@ Automatic context is limited to 800 estimated tokens, depth 4, 1.5 seconds, and 
 See [configuration](docs/configuration.md), [troubleshooting](docs/troubleshooting.md), and the [Chinese guide](docs/README.zh-CN.md).
 The current release gate is recorded in [v0.1.2 acceptance](docs/acceptance-v0.1.2.md).
 
+## Installation feedback
+
+After trying TypeLens in a real DSH profile, use the short
+[verified install report](https://github.com/fantasyce/dsh-typelens/issues/new?template=verified_install.yml)
+to record whether installation and the first context or diagnostic result
+worked. Include versions and bounded source-free evidence only.
+
 ## Development
 
 ```sh
