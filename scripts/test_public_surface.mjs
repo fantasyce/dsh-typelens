@@ -4,6 +4,7 @@ const required = [
   'README.md', 'LICENSE', 'SECURITY.md', 'SUPPORT.md', 'CONTRIBUTING.md',
   'CODE_OF_CONDUCT.md', '.github/ISSUE_TEMPLATE/bug_report.yml',
   '.github/ISSUE_TEMPLATE/integration_case.yml',
+  '.github/ISSUE_TEMPLATE/verified_install.yml',
   '.github/pull_request_template.md', '.github/workflows/publish-npm.yml',
   'docs/quickstart.md',
   'docs/launch/community-posts.md', 'docs/launch/faq.md',
@@ -12,6 +13,7 @@ const required = [
 for (const path of required) await readFile(new URL(`../${path}`, import.meta.url), 'utf8')
 
 const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8')
+const verifiedInstall = await readFile(new URL('../.github/ISSUE_TEMPLATE/verified_install.yml', import.meta.url), 'utf8')
 const quickstart = await readFile(new URL('../docs/quickstart.md', import.meta.url), 'utf8')
 const chineseGuide = await readFile(new URL('../docs/README.zh-CN.md', import.meta.url), 'utf8')
 const site = await readFile(new URL('../site/index.html', import.meta.url), 'utf8')
@@ -20,6 +22,10 @@ const showcase = await readFile(new URL('../docs/launch/showcase-submission.md',
 const communityPosts = await readFile(new URL('../docs/launch/community-posts.md', import.meta.url), 'utf8')
 const npmInstall = 'dsh plugin --profile web add dsh-typelens'
 const npmUpgrade = 'dsh plugin --profile web update dsh-typelens --latest'
+if (!readme.includes('issues/new?template=verified_install.yml')) throw new Error('README missing verified install report link')
+for (const requiredText of ['Verified DSH install report', 'DSH version', 'TypeLens version', 'Profile', 'Observed result', 'no secrets, private paths, proprietary source, or model-provider data']) {
+  if (!verifiedInstall.includes(requiredText)) throw new Error(`verified install template missing ${requiredText}`)
+}
 for (const [label, surface] of [
   ['README', readme],
   ['quickstart', quickstart],
